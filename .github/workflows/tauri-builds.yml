@@ -76,8 +76,8 @@ jobs:
         SPOTIFY_CLIENT_ID: ${{ secrets.SPOTIFY_CLIENT_ID }}
         SPOTIFY_CLIENT_SECRET: ${{ secrets.SPOTIFY_CLIENT_SECRET }}
       with:
-        tagName: snapshot-v__VERSION__ # the action automatically replaces \_\_VERSION\_\_ with the app version
-        releaseName: "Pre-Release v__VERSION__"
+        tagName: v__VERSION__
+        releaseName: "Release v__VERSION__"
         releaseBody: "See the assets to download this version and install."
         releaseDraft: true
         prerelease: false
@@ -169,3 +169,4 @@ jobs:
           files: |
             ${{ needs.setup.outputs.name_bin }}/${{ needs.setup.outputs.arch_pkg_name }}
             ${{ needs.setup.outputs.rpm_pkg_name }}
+            ${{ needs.setup.outputs.deb_pkg_name }}
