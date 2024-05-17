@@ -1,4 +1,4 @@
-name: "lazap-bundles"
+name: "lazap-build"
 on:
   workflow_dispatch:
 env:
