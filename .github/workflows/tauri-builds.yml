@@ -35,6 +35,9 @@ jobs:
           echo "license=$(node -p "require('./package.json').license")" >> $GITHUB_OUTPUT
           
   publish-tauri:
+    needs: [setup]
+    permissions:
+      contents: write
     strategy:
       fail-fast: false
       matrix:
