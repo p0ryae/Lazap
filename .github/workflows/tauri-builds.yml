@@ -39,7 +39,13 @@ jobs:
       fail-fast: false
       matrix:
         include:
+          - platform: 'macos-latest'
+            args: '--target aarch64-apple-darwin'
+          - platform: 'macos-latest'
+            args: '--target x86_64-apple-darwin'
           - platform: 'ubuntu-latest'
+            args: ''
+          - platform: 'windows-latest'
             args: ''
 
     runs-on: ${{ matrix.platform }}
@@ -81,6 +87,7 @@ jobs:
         releaseBody: "See the assets to download this version and install."
         releaseDraft: true
         prerelease: false
+        args: ${{ matrix.args }}
 
     - name: copy deb package && create PKGBUILD file (ubuntu only)
       if: matrix.platform == 'ubuntu-latest'
