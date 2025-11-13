@@ -2,12 +2,8 @@ name: CI
 on: 
   pull_request:
   push:
-    branches: [main, cpp]
-    paths:
-      - '**.c'
-      - '**.cpp'
-      - '**.h'
-      - '**.hpp'
+    branches: ["**"]
+
 
 jobs:
   formatting-check:
