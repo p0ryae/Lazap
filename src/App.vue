@@ -10,11 +10,9 @@
     <div class="homebox" id="home">
       <div class="centerchildren">
         <div class="children fadeInUp">
-          <img
-            class="head-pic"
-            src="./assets/img/main_banner.png"
-            id="head-pic"
-          />
+          <div class="gradient-bg">
+            <img class="banner" src="./assets/img/banner.png" />
+          </div>
         </div>
         <div class="children fadeInDown">
           <div class="jump-back">
@@ -118,14 +116,14 @@
 
     <monitor-comp></monitor-comp>
 
-    <div class="secondorybox" id="activity">
+    <div class="secondorybox" id="overclock">
       <div class="secondary-top">
         <p>Overclock</p>
       </div>
       <h1 class="fade">Coming Soon...</h1>
     </div>
 
-    <div class="secondorybox" id="friends">
+    <div class="secondorybox" id="benchmark">
       <div class="secondary-top">
         <p>Benchmark</p>
       </div>
@@ -142,6 +140,7 @@
           placeholder="Launch Flags..."
         /> -->
       <button class="gameMenuBtn" id="removeGame">Remove Game</button>
+      <button class="gameMenuCloseBtn" id="closeMenu">Close Menu</button>
       <!-- </div> -->
     </div>
   </div>
@@ -341,6 +340,20 @@ export default {
       document
         .getElementById("removeGame")
         .addEventListener("click", async function () {
+          const gamemenu = document.getElementById("gameMenu");
+          gamemenu.classList.add("active");
+          let isGameMenuAlreadyActive = false;
+          gamemenu.addEventListener("animationend", function () {
+            if (
+              gamemenu.style.display === "flex" &&
+              isGameMenuAlreadyActive === false
+            ) {
+              gamemenu.classList.remove("active");
+              gamemenu.style.display = "none";
+              isGameMenuAlreadyActive = true;
+            }
+          });
+
           let data = JSON.parse(
             await invoke("read_file", {
               filePath: (await path.appDir()) + "cache/games/data.json",
@@ -372,6 +385,25 @@ export default {
           );
         });
     })();
+
+    document
+      .getElementById("closeMenu")
+      .addEventListener("click", async function () {
+        const gamemenu = document.getElementById("gameMenu");
+        gamemenu.classList.add("active");
+        let isGameMenuAlreadyActive = false;
+        gamemenu.addEventListener("animationend", function () {
+          if (
+            gamemenu.style.display === "flex" &&
+            isGameMenuAlreadyActive === false
+          ) {
+            gamemenu.classList.remove("active");
+            gamemenu.style.display = "none";
+            isGameMenuAlreadyActive = true;
+          }
+        });
+      });
+
     function checkForUpdate() {
       window.__TAURI__.updater
         .checkUpdate()
@@ -472,6 +504,7 @@ body {
 .homebox {
   display: flex;
   height: 100%;
+  width: 100%;
   gap: 10px;
 }
 
@@ -583,21 +616,34 @@ body {
 
 .centerchildren {
   display: flex;
+  width: 100%;
   flex-direction: column;
   gap: 10px;
   justify-content: space-between;
 }
+
 .children {
   height: 100%;
+  width: 100%;
+  gap: 10px;
+  justify-content: center;
 }
 
-.head-pic {
+.gradient-bg {
   width: 100%;
   height: 100%;
-  position: relative;
-  object-fit: cover;
+  background: rgba(var(--all-color-primary), 0.7);
   border-radius: 20px;
-  image-rendering: auto;
+  background-size: 200% 200%;
+  overflow: hidden;
+}
+
+.gradient-bg  .banner{
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  position: absolute;
+  border-radius: 20px;
 }
 
 .jump-back {
@@ -611,7 +657,7 @@ body {
 .jump-back p {
   color: rgb(197, 197, 197);
   margin: 18px 0px 0 18px;
-  
+
   font-size: 18px;
   font-family: Nunito-ExtraBold;
 }
@@ -808,16 +854,17 @@ body {
   flex-grow: 1;
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(125px, 1fr));
-  gap: 1.5rem;
-  padding: 0 1rem;
-  overflow-y: scroll;
+  gap: 1rem;
+  padding: 0 1.3rem;
+  overflow-y: none;
   align-items: center;
 }
 
 .placeholderGames {
-  aspect-ratio: 3 / 4;
+  height: 78%;
   border-radius: 14px;
   transition: all 0.25s cubic-bezier(0.165, 0.74, 0.44, 1);
+  border: solid rgba(var(--accent-color), 0.4) 6px;
 
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   opacity: 0.5;
@@ -832,16 +879,14 @@ body {
 }
 
 .mainPageGamebox {
-  position: relative;
   image-rendering: auto;
   text-align: center;
-  display: inline-block;
   border-radius: 14px;
   transition: all 0.25s cubic-bezier(0.165, 0.74, 0.44, 1);
-  aspect-ratio: 3 / 4;
+  height: 78%;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  border: solid rgba(var(--accent-color), 1) 6px;
   opacity: 0.7;
-  outline: solid rgba(var(--accent-color), 1) 6px;
   background-position: 50% 40% !important;
   object-fit: cover;
 }
@@ -961,6 +1006,10 @@ img,
   align-items: center;
 }
 
+.gameMenu.active {
+  animation: gameMenuAnimationReverse 0.2s both ease-out;
+}
+
 .gameMenu .gameMenuBtn {
   font-family: Nunito;
   color: rgb(201, 201, 201);
@@ -978,6 +1027,26 @@ img,
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.gameMenu .gameMenuCloseBtn {
+  font-family: Nunito;
+  color: rgb(201, 201, 201);
+  border: 4px solid rgba(var(--accent-color), 1);
+  border-radius: 12px;
+  font-size: 18px;
+  background-color: rgba(var(--all-color-primary), 0.7);
+  opacity: 0.9;
+  width: 13.78rem;
+  height: 50px;
+  text-decoration: none;
+  text-shadow: none;
+  padding: 10;
+  margin-top: 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: background-color 0.3s ease-out;
 }
 
 .gameMenu .gameMenuBody {
@@ -1011,6 +1080,10 @@ img,
   margin-top: 100px;
 }
 
+.gameMenu .gameMenuBody .gameMenuCloseBtn:first-child {
+  margin-top: 100px;
+}
+
 .gameMenu .gameMenuTitle {
   font-size: 20px;
   color: #cacaca;
@@ -1018,6 +1091,11 @@ img,
   margin-top: 40px;
   display: block;
   margin-bottom: 50px;
+}
+
+.gameMenu .gameMenuCloseBtn:hover {
+  scale: 1.05;
+  background-color: rgba(var(--accent-color), 0.5);
 }
 
 .gameMenu .gameMenuBtn:hover {
@@ -1325,6 +1403,17 @@ img,
   100% {
     width: 30rem;
     opacity: 1;
+  }
+}
+
+@keyframes gameMenuAnimationReverse {
+  0% {
+    width: 30rem;
+    opacity: 1;
+  }
+  100% {
+    width: 0px;
+    opacity: 0.5;
   }
 }
 
