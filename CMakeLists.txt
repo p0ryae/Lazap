@@ -60,7 +60,8 @@ FetchContent_Declare(
 )
 set(BUILD_SHARED_LIBS OFF CACHE BOOL "Build static libraries only")
 set(CPR_BUILD_TESTS OFF CACHE BOOL "Disable tests")
-
+set(glew-cmake_BUILD_SHARED OFF CACHE BOOL "Build the shared glew library" FORCE)
+set(glew-cmake_BUILD_STATIC ON CACHE BOOL "Build the static glew library" FORCE)
 FetchContent_MakeAvailable(glew glfw glaze imgui stb lunasvg tomlplusplus cpr)
 
 #-----------------------------------------------------------------------------------------------------------------------
